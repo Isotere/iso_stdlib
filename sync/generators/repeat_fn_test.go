@@ -2,18 +2,21 @@ package generators
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"testing"
 	"time"
 )
 
-func TestRepeat(t *testing.T) {
+func TestRepeatFn(t *testing.T) {
 	// Вместо примера использования
 	t.Run("success", func(t *testing.T) {
-		inValues := []string{"one", "two", "three"}
+		fn := func() int {
+			return rand.N(5000)
+		}
 
 		done := make(chan struct{})
 
-		genCh := Repeat(done, inValues...)
+		genCh := RepeatFn(done, fn)
 
 		time.AfterFunc(time.Microsecond*100, func() { close(done) })
 
