@@ -8,7 +8,7 @@ func Take[T any](done <-chan struct{}, valueStream <-chan T, num int) <-chan T {
 			select {
 			case <-done:
 				return
-			case takeStream <- <-valueStream:
+			case takeStream <- <-valueStream: // В реальном проекте лучше использовать подход or-done
 			}
 		}
 	}()
