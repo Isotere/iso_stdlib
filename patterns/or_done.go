@@ -1,4 +1,4 @@
-package sync
+package patterns
 
 // OrDone исключаем чтение дефолтного значения из закрытого канала
 func OrDone[T any](done <-chan struct{}, c <-chan T) <-chan T {

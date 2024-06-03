@@ -1,4 +1,4 @@
-package sync
+package patterns
 
 // Or комбинация done-каналов. Сработает, когда любой из входных каналов закроется
 func Or(channels ...<-chan interface{}) <-chan interface{} {
