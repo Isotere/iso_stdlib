@@ -21,4 +21,12 @@ func TestShardedMap(t *testing.T) {
 
 	m.Delete("value1")
 	assert.Equal(t, int64(0), m.Len())
+
+	m.Set("value2", 200)
+	m.Set("value3", 300)
+	m.Set("value4", 400)
+	m.Set("value5", 500)
+
+	keys := m.Keys()
+	assert.Equal(t, 4, len(keys))
 }

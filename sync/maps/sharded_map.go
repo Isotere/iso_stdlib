@@ -30,6 +30,34 @@ func NewShardedMap[K comparable, V any](nshards ShardsCount) *ShardedMap[K, V] {
 	}
 }
 
+func (sm *ShardedMap[K, V]) Keys() []K {
+	keys := make([]K, 0, sm.Len())
+
+	mu := sync.Mutex{}
+
+	wg := sync.WaitGroup{}
+	wg.Add(len(sm.shards))
+
+	for _, shard := range sm.shards {
+		go func(shard *shardedMapItem[K, V]) {
+			defer wg.Done()
+
+			shard.RLock()
+			defer shard.RUnlock()
+
+			for key := range shard.m {
+				mu.Lock()
+				keys = append(keys, key)
+				mu.Unlock()
+			}
+		}(shard)
+	}
+
+	wg.Wait()
+
+	return keys
+}
+
 func (sm *ShardedMap[K, V]) Get(key K) (V, bool) {
 	shard := sm.getShard(key)
 
